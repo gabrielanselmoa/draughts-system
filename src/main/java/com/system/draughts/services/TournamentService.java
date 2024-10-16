@@ -8,6 +8,7 @@ import com.system.draughts.domain.tournament.Tournament;
 import com.system.draughts.domain.tournament.TournamentDTO;
 import com.system.draughts.domain.tournament.TournamentRequestDTO;
 import com.system.draughts.repositories.MatchRepository;
+import com.system.draughts.repositories.PlayerRepository;
 import com.system.draughts.repositories.TournamentRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.BeanUtils;
@@ -24,13 +25,13 @@ import java.util.stream.Collectors;
 public class TournamentService {
 
     private TournamentRepository tournamentRepository;
-    private PlayerService playerService;
+    private PlayerRepository playerRepository;
     private MatchRepository matchRepository;
 
     @Autowired
-    public TournamentService(TournamentRepository tournamentRepository, PlayerService playerService, MatchRepository matchRepository) {
+    public TournamentService(TournamentRepository tournamentRepository, PlayerRepository playerRepository, MatchRepository matchRepository) {
         this.tournamentRepository = tournamentRepository;
-        this.playerService = playerService;
+        this.playerRepository = playerRepository;
         this.matchRepository = matchRepository;
     }
 
@@ -54,12 +55,13 @@ public class TournamentService {
         tournament.setName(tournamentRequestDTO.getTournamentName());
 
         List<Player> players = tournamentRequestDTO.getPlayerIds().stream()
-                .map(id -> playerService.findById(id))
+                .map(id -> playerRepository.findById(id))
+                .filter(Optional::isPresent) // Filtra os presentes
+                .map(Optional::get) // Extrai os valores
                 .collect(Collectors.toList());
 
-        for (Player p : players){
-            tournament.getPlayers().add(p);
-        }
+        tournament.getPlayers().addAll(players);
+
         tournamentRepository.save(tournament);
 
         return new TournamentDTO(tournament);
@@ -118,7 +120,9 @@ public class TournamentService {
         tournamentDTO.setName(tournament.getName());
 
         List<Player> players = dto.getPlayerIds().stream()
-                .map(playerService::findById)
+                .map(playerRepository::findById)
+                .filter(Optional::isPresent) // Filtra os presentes
+                .map(Optional::get) // Extrai os valores
                 .collect(Collectors.toList());
 
         for (Player p : players) {
