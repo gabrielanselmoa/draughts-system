@@ -1,8 +1,8 @@
 package com.system.draughts.exceptions.handlers;
 
-import com.backendchallenge.loan_app.exceptions.EntityNotFoundException;
-import com.backendchallenge.loan_app.exceptions.ResourceNotFoundException;
-import com.backendchallenge.loan_app.exceptions.dto.CustomError;
+import com.system.draughts.exceptions.EntityNotFoundException;
+import com.system.draughts.exceptions.ResourceNotFoundException;
+import com.system.draughts.exceptions.dto.CustomError;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

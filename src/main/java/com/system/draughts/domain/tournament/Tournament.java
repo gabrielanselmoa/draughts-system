@@ -1,27 +1,30 @@
-package com.system.draughts.domain.player;
+package com.system.draughts.domain.tournament;
 
-import com.system.draughts.repositories.PlayerRepository;
+import com.system.draughts.domain.player.Player;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "tb_player")
-public class Player {
+public class Tournament {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
-    private Integer score;
 
-    public Player(){}
+    @ManyToMany
+    private List<Player> players = new ArrayList<>();
 
-    public Player(Long id, String name, Integer score) {
+    public Tournament(){}
+
+    public Tournament(Long id, String name, List<Player> players) {
         this.id = id;
         this.name = name;
-        this.score = score;
+        this.players = players;
     }
 
     public Long getId() {
@@ -40,24 +43,25 @@ public class Player {
         this.name = name;
     }
 
-    public Integer getScore() {
-        return score;
+    public List<Player> getPlayers() {
+        return players;
     }
 
-    public void setScore(Integer score) {
-        this.score = score;
+    public void setPlayers(List<Player> players) {
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Player player = (Player) o;
-        return Objects.equals(id, player.id);
+        Tournament that = (Tournament) o;
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
     }
+
 }
+

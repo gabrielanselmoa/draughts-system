@@ -1,20 +1,31 @@
 package com.system.draughts.domain.player;
 
-public class PlayerRequestDTO {
+public class PlayerDTO {
 
+    private Long id;
     private String name;
     private Integer score;
 
-    public PlayerRequestDTO(){}
+    public PlayerDTO(){}
 
-    public PlayerRequestDTO(String name, Integer score) {
+    public PlayerDTO(Long id, String name, Integer score) {
+        this.id = id;
         this.name = name;
         this.score = score;
     }
 
-    public PlayerRequestDTO(Player player){
+    public PlayerDTO(Player player){
+        id = player.getId();
         name = player.getName();
         score = player.getScore();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
